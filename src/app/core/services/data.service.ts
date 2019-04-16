@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { SystemConstants } from '.././common/system.constant';
 import { AuthenService } from './authen.service';
@@ -45,12 +45,26 @@ export class DataService {
     this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
     return this._http.delete(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: this.headers }).pipe(map(this.extractData));
   }
+  // api delete multi
+  deleteWithMultiParams(uri: string, params) {
+    this.headers.delete('Authorization');
+
+    this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
+    var paramStr: string = '';
+    for (let param in params) {
+      paramStr += param + "=" + params[param] + '&';
+    }
+    return this._http.delete(SystemConstants.BASE_API + uri + "/?" + paramStr,  { headers: this.headers }).pipe(map(this.extractData));
+
+  }
   // api post file method
   postFile(uri: string, data?: any) {
-    return null;
+    let newHeader = new HttpHeaders();
+    newHeader.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
+    return this._http.post(SystemConstants.BASE_API + uri, data,{ headers: newHeader }).pipe(map(this.extractData));
   }
-  private extractData(res: Response) {
-    let body = res.json();
+  private extractData(res: HttpResponse<object>) {
+    let body = res;
     return body || {};
   }
   public handleError(error: any) {
