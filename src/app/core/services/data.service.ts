@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DataService {
-  private headers: HttpHeaders;
+  private headers = new HttpHeaders();
   constructor(private _http: HttpClient, private _router: Router
     , private _authenService: AuthenService
     , private _notificationService: NotificationService
@@ -20,47 +20,36 @@ export class DataService {
     this.headers = new HttpHeaders();
     this.headers.append('Content-Type', 'application/json');
   }
-
+  private httpHeaders = this.headers.set("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
   // api get method
   get(uri: string) {
-    this.headers.delete("Authorization");
-    this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
-    return this._http.get(SystemConstants.BASE_API + uri, { headers: this.headers }).pipe(map(this.extractData));
+    return this._http.get(SystemConstants.BASE_API + uri, { headers: this.httpHeaders}).pipe(map(this.extractData));
   }
   //api post method
   post(uri: string, data?: any) {
-    this.headers.delete("Authorization");
-    this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
-    return this._http.post(SystemConstants.BASE_API + uri, data, { headers: this.headers }).pipe(map(this.extractData));
+    return this._http.post(SystemConstants.BASE_API + uri, data, { headers: this.httpHeaders }).pipe(map(this.extractData));
   }
   // api put method
   put(uri: string, data?: any) {
-    this.headers.delete("Authorization");
-    this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
-    return this._http.put(SystemConstants.BASE_API + uri, data, { headers: this.headers }).pipe(map(this.extractData));
+    return this._http.put(SystemConstants.BASE_API + uri, data, { headers: this.httpHeaders }).pipe(map(this.extractData));
   }
   // api delete method
   delete(uri: string, key: string, id: string) {
-    this.headers.delete("Authorization");
-    this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
-    return this._http.delete(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: this.headers }).pipe(map(this.extractData));
+    return this._http.delete(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: this.httpHeaders }).pipe(map(this.extractData));
   }
   // api delete multi
   deleteWithMultiParams(uri: string, params) {
-    this.headers.delete('Authorization');
-
-    this.headers.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().access_token);
     var paramStr: string = '';
     for (let param in params) {
       paramStr += param + "=" + params[param] + '&';
     }
-    return this._http.delete(SystemConstants.BASE_API + uri + "/?" + paramStr,  { headers: this.headers }).pipe(map(this.extractData));
+    return this._http.delete(SystemConstants.BASE_API + uri + "/?" + paramStr,  { headers: this.httpHeaders }).pipe(map(this.extractData));
 
   }
   // api post file method
   postFile(uri: string, data?: any) {
     let newHeader = new HttpHeaders();
-    newHeader.append("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
+    newHeader.set("Authorization", "Bearer " + this._authenService.getLoggedInUser().token);
     return this._http.post(SystemConstants.BASE_API + uri, data,{ headers: newHeader }).pipe(map(this.extractData));
   }
   private extractData(res: HttpResponse<object>) {

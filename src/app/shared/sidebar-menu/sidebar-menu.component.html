@@ -2,15 +2,15 @@
   <div class="menu_section">
     <h3>General</h3>
     <ul class="nav side-menu">
-      <li *ngFor="let item of portals"><a><i class="fa fa-home"></i> {{item.portalItemLabel}} <span *ngIf="item.portalChildModel.length>0" class="fa fa-chevron-down"></span></a>
+      <li *ngFor="let item of portals"><a><i class="{{item.portalIcon}}"></i> {{item.portalItemLabel}} <span *ngIf="item.portalChildModel.length>0" class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
-          <li *ngFor="let subItem of item.portalChildModel"><a>{{subItem.portalItemLabel}} <span *ngIf="subItem.portalChildModel.length>0" class="fa fa-chevron-down"></span></a>
+          <li *ngFor="let subItem of item.portalChildModel"><a routerLink="{{subItem.portalUrl}}" routerLinkActive="active">{{subItem.portalItemLabel}} <span *ngIf="subItem.portalChildModel.length>0" class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li *ngFor="let subItemA of subItem.portalChildModel"><a>{{subItemA.portalItemLabel}} <span *ngIf="subItemA.portalChildModel.length>0" class="fa fa-chevron-down"></span></a>
+              <li *ngFor="let subItemA of subItem.portalChildModel"><a routerLink="{{subItem.portalUrl}}" routerLinkActive="active">{{subItemA.portalItemLabel}} <span *ngIf="subItemA.portalChildModel.length>0" class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                  <li *ngFor="let subItemB of subItemA.portalChildModel"><a>{{subItemB.portalItemLabel}} <span *ngIf="subItemB.portalChildModel.length>0" class="fa fa-chevron-down"></span></a>
+                  <li *ngFor="let subItemB of subItemA.portalChildModel"><a routerLink="{{subItem.portalUrl}}" routerLinkActive="active">{{subItemB.portalItemLabel}} <span *ngIf="subItemB.portalChildModel.length>0" class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li *ngFor="let subItemC of subItemB.portalChildModel"><a>{{subItemC.portalItemLabel}} <span *ngIf="subItemC.portalChildModel.length>0" class="fa fa-chevron-down"></span></a>
+                      <li *ngFor="let subItemC of subItemB.portalChildModel"><a routerLink="{{subItem.portalUrl}}" routerLinkActive="active">{{subItemC.portalItemLabel}} <span *ngIf="subItemC.portalChildModel.length>0" class="fa fa-chevron-down"></span></a>
                       </li>
                     </ul>
                   </li>
